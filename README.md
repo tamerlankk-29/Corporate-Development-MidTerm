@@ -1,0 +1,1 @@
+# Task Management App\n\nFull-stack application with Go backend and React frontend
