@@ -10,8 +10,6 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"task-management-app/internal/service"
-	"task-management-app/internal/transport"
 	_ "gorm.io/gorm"
 	"task-management-app/internal/config"
 	"task-management-app/internal/db"
@@ -19,6 +17,8 @@ import (
 	"task-management-app/internal/model"
 	"task-management-app/internal/repository/gormrepo"
 	"task-management-app/internal/repository/rawrepo"
+	"task-management-app/internal/service"
+	"task-management-app/internal/transport"
 )
 
 func main() {
