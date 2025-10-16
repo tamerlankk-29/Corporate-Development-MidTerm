@@ -7,17 +7,23 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"task-management-app/internal/repository/gormrepo"
 	"time"
 
-	"github.com/gorilla/mux"
-	_ "gorm.io/gorm"
 	"task-management-app/internal/config"
 	"task-management-app/internal/db"
 	"task-management-app/internal/handler"
 	"task-management-app/internal/model"
+<<<<<<< HEAD
 	"task-management-app/internal/repository"
 	"task-management-app/internal/repository/gormrepo"
 	"task-management-app/internal/repository/rawrepo"
+=======
+
+	"github.com/gorilla/mux"
+	_ "gorm.io/gorm"
+
+>>>>>>> backend
 	"task-management-app/internal/service"
 	"task-management-app/internal/transport"
 )
@@ -32,17 +38,20 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed connect raw db: %v", err)
 	}
+	log.Println("Successfully connected to PostgreSQL (raw sql)!")
 	defer sqlDB.Close()
 
 	gormDB, err := db.NewGormDB(cfg.PostgresDSN())
 	if err != nil {
 		log.Fatalf("failed connect gorm db: %v", err)
 	}
+	log.Println("Successfully connected to PostgreSQL (gorm)!")
 
 	if err := gormDB.AutoMigrate(&model.Task{}); err != nil {
 		log.Fatalf("gorm automigrate: %v", err)
 	}
 
+<<<<<<< HEAD
 	var repo repository.TaskRepository
 	switch cfg.RepoDriver {
 	case "gorm":
@@ -50,6 +59,12 @@ func main() {
 	default:
 		repo = rawrepo.NewRawTaskRepository(sqlDB)
 	}
+=======
+	//rawRepo := rawrepo.NewRawTaskRepository(sqlDB)
+	gormRepo := gormrepo.NewGormTaskRepository(gormDB)
+
+	repo := gormRepo
+>>>>>>> backend
 
 	svc := service.NewTaskService(repo)
 	taskHandler := handler.NewTaskHandler(svc)
