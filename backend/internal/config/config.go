@@ -15,6 +15,7 @@ type Config struct {
 	DBName     string
 	DBSSLMode  string
 	AppPort    string
+	RepoDriver string
 }
 
 func Load() (*Config, error) {
@@ -23,10 +24,11 @@ func Load() (*Config, error) {
 		DBHost:     getEnv("DB_HOST", "localhost"),
 		DBPort:     getEnv("DB_PORT", "5432"),
 		DBUser:     getEnv("DB_USER", "postgres"),
-		DBPassword: getEnv("DB_PASSWORD", "Kr2d2766"),
+		DBPassword: getEnv("DB_PASSWORD", "1234"),
 		DBName:     getEnv("DB_NAME", "taskdb"),
 		DBSSLMode:  getEnv("DB_SSLMODE", "disable"),
 		AppPort:    getEnv("APP_PORT", "8080"),
+		RepoDriver: getEnv("REPO_DRIVER", "raw"),
 	}
 	return c, nil
 }

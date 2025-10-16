@@ -16,11 +16,8 @@ export default function TaskList() {
         // setTasks(response.data);
 
         //эти удалить
-        const fakeTasks = [
-          { id: 1, title: "Learn React", description: "Finish hooks", status: "in progress" },
-          { id: 2, title: "Write report", description: "For project", status: "done" },
-        ];
-        setTasks(fakeTasks);
+        const data = await taskService.getAll();
+        setTasks(data);
       } catch {
         setAlert({ type: "error", message: "Error loading tasks" });
       } finally {
@@ -32,7 +29,8 @@ export default function TaskList() {
 
   const handleDelete = async (id) => {
     try {
-      setTasks(tasks.filter((t) => t.id !== id));
+      await taskService.remove(id);
+      setTasks((prev) => prev.filter((t) => t.id !== id));
       setAlert({ type: "success", message: "The task was successfully deleted." });
     } catch {
       setAlert({ type: "error", message: "Error deleting task" });

@@ -15,6 +15,7 @@ import (
 	"task-management-app/internal/db"
 	"task-management-app/internal/handler"
 	"task-management-app/internal/model"
+	"task-management-app/internal/repository"
 	"task-management-app/internal/repository/gormrepo"
 	"task-management-app/internal/repository/rawrepo"
 	"task-management-app/internal/service"
@@ -42,10 +43,13 @@ func main() {
 		log.Fatalf("gorm automigrate: %v", err)
 	}
 
-	rawRepo := rawrepo.NewRawTaskRepository(sqlDB)
-	gormRepo := gormrepo.NewGormTaskRepository(gormDB)
-
-	repo := rawRepo
+	var repo repository.TaskRepository
+	switch cfg.RepoDriver {
+	case "gorm":
+		repo = gormrepo.NewGormTaskRepository(gormDB)
+	default:
+		repo = rawrepo.NewRawTaskRepository(sqlDB)
+	}
 
 	svc := service.NewTaskService(repo)
 	taskHandler := handler.NewTaskHandler(svc)

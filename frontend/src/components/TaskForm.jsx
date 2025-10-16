@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { taskService } from "../api/taskService";
 
 export default function TaskForm({ isEdit = false }) {
   const navigate = useNavigate();
@@ -16,17 +16,12 @@ export default function TaskForm({ isEdit = false }) {
     if (isEdit && id) {
       async function fetchTask() {
         try {
-        //   const response = await axios.get(`http://localhost:8080/tasks/${id}`);
-        //   setTask(response.data);
-
-          //локальный пример- потом удалить
-          const fakeTask = {
-            id: id,
-            title: "Learn React",
-            description: "Complete hooks and router",
-            status: "in progress",
-          };
-          setTask(fakeTask);
+          const data = await taskService.getById(id);
+          setTask({
+            title: data.title || "",
+            description: data.description || "",
+            status: data.status || "in progress",
+          });
         } catch (err) {
           console.error("Error loading task:", err);
           setError("Failed to load task");
@@ -57,11 +52,9 @@ export default function TaskForm({ isEdit = false }) {
 
     try {
       if (isEdit) {
-        //await axios.put(`http://localhost:8080/tasks/${id}`, task);
-        console.log("Changed:", task);
+        await taskService.update(id, task);
       } else {
-        //await axios.post("http://localhost:8080/tasks", task);
-        console.log("Created:", task);
+        await taskService.create(task);
       }
 
       navigate("/"); 
